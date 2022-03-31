@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2022 Hyun Woo Park
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>

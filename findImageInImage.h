@@ -1,5 +1,12 @@
 #pragma once
 
+/**
+ * Copyright (c) 2022 Hyun Woo Park
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
 #ifndef FINDIMAGEINIMAGE_HEADER
 #define FINDIMAGEINIMAGE_HEADER
 
