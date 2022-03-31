@@ -94,7 +94,7 @@ void find2DImageInImage(
   size_t searchSpaceW = haystackW - needleW + 1;
   size_t searchSpaceH = haystackH - needleH + 1;
 
-  uint32_t *hashBuffer = (uint32_t *)malloc(searchSpaceW * haystackH);
+  uint32_t *hashBuffer = (uint32_t *)malloc(sizeof(uint32_t) * searchSpaceW * haystackH);
   uint32_t searchHash;
   size_t x, y;
 
