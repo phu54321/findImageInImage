@@ -1,0 +1,15 @@
+{
+  "workbench.colorCustomizations": {
+    "[Dracula]": {
+      "gitDecoration.ignoredResourceForeground": "#666"
+    },
+    "activityBar.background": "#1F3215",
+    "titleBar.activeBackground": "#2B471E",
+    "titleBar.activeForeground": "#F9FCF7"
+  },
+  "cmake.sourceDirectory": "${workspaceFolder}/.",
+  "files.associations": {
+    "*.dptr": "json",
+    "__config": "c"
+  }
+}
