@@ -9,35 +9,60 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "findImageInImage.h"
+#include "lodepng.h"
+#include <time.h>
 
-const uint32_t haystack[10][10] = {
-    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-    {11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
-    {21, 22, 23, 24, 25, 26, 27, 28, 29, 30},
-    {31, 32, 33, 34, 35, 36, 37, 38, 39, 40},
-    {41, 42, 43, 44, 45, 46, 47, 48, 49, 50},
-    {51, 52, 53, 54, 55, 56, 57, 58, 59, 60},
-    {61, 62, 63, 64, 65, 66, 67, 68, 69, 70},
-    {71, 72, 73, 74, 75, 76, 77, 78, 79, 80},
-    {81, 82, 83, 84, 85, 86, 87, 88, 89, 90},
-    {91, 92, 93, 94, 95, 96, 97, 98, 99, 100},
-};
+void decodeOneStep(const char *filename)
+{
+  unsigned error;
+  unsigned char *image = 0;
+  unsigned width, height;
 
-const uint32_t needle[2][3] = {
-    {45, 46, 47},
-    {55, 56, 57}};
+  error = lodepng_decode32_file(&image, &width, &height, filename);
+  if (error)
+    printf("error %u: %s\n", error, lodepng_error_text(error));
 
+  /*use image here*/
 
-void cb(size_t x, size_t y) {
+  free(image);
+}
+
+void cb(size_t x, size_t y)
+{
   printf("found (%lu, %lu)\n", x, y);
 }
 
 int main()
 {
+  unsigned char *haystack;
+  unsigned haystackW, haystackH;
+  unsigned char *needle;
+  unsigned needleW, needleH;
+  clock_t t0;
+
+  lodepng_decode32_file(&haystack, &haystackW, &haystackH, "../testData/screenshot.png");
+  lodepng_decode32_file(&needle, &needleW, &needleH, "../testData/inspector_transform.png");
+  printf("haystack size: %u x %u\n", haystackW, haystackH);
+  printf("needle size: %u x %u\n", needleW, needleH);
+
+  t0 = clock();
   find2DImageInImage(
-      &haystack[0][0], 10, 10, 10,
-      &needle[0][0], 3, 2, 3,
+      (uint32_t *)haystack, haystackW, haystackH, haystackW,
+      (uint32_t *)needle, needleW, needleH, needleW,
       cb);
+  printf(" - elapsed time: %lfms\n", (double)(clock() - t0) / CLOCKS_PER_SEC);
+
+  t0 = clock();
+  find2DImageInImage(
+      (uint32_t *)haystack, haystackW, haystackH, haystackW,
+      (uint32_t *)needle, needleW, needleH, needleW,
+      cb);
+  printf(" - elapsed time: %lfms\n", (double)(clock() - t0) / CLOCKS_PER_SEC);
+
+  // 0.034909ms in m1 pro. YMMV
+
+  free(haystack);
+  free(needle);
 
   return 0;
 }
